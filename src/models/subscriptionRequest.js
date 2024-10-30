@@ -4,15 +4,17 @@ const subscriptionRequestSchema = new mongoose.Schema(
   {
     fromUserId: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
     toUserId: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
     status: {
       type: String,
-      enum: { values: ["accepted", "rejected", "idle"] },
+      enum: { values: ["accepted", "idle"] },
       message: `{VALUE} is unsupported status type`,
     },
   },

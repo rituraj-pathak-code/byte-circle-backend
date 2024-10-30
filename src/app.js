@@ -9,6 +9,8 @@ import { userAuth } from "./middlewares/auth.js";
 import authRouter from "./routes/auth.js"
 import profileRouter from "./routes/profile.js"
 import subscriptionRequestRouter from "./routes/subscriptionRequest.js"
+import userRouter from "./routes/user.js"
+import postRouter from "./routes/post.js"
 
 dotenv.config();
 
@@ -18,7 +20,10 @@ app.use(cookieParser())
 
 app.use('/api/auth',authRouter);
 app.use('/api/profile', userAuth, profileRouter);
-app.use('/api/user', userAuth, subscriptionRequestRouter);
+app.use('/api/subscribe', userAuth, subscriptionRequestRouter);
+app.use('/api/user', userAuth, userRouter);
+app.use('/api/post', postRouter);
+
 
 
 
