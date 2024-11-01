@@ -8,7 +8,7 @@ export const getAllsubscriptionRequestHandler = async (req, res) => {
     const subscribersList = await SubscriptionRequest.find({
       toUserId: userId,
       status: "idle",
-    }).populate("fromUserId", ["firstName", "lastName"]);
+    }).populate("fromUserId", ["firstName", "lastName","photoURL"]);
 
     const sendingList = subscribersList.map(({ fromUserId }) => fromUserId);
 
@@ -31,8 +31,8 @@ export const getAllSubscribersHandler = async (req, res) => {
         { toUserId: userId, status: "accepted" },
       ],
     })
-      .populate("fromUserId", ["firstName", "lastName"])
-      .populate("toUserId", ["firstName", "lastName"]);
+      .populate("fromUserId", ["firstName", "lastName","photoURL"])
+      .populate("toUserId", ["firstName", "lastName","photoURL"]);
 
     const data = subscribers.map((row) => {
       if (userId.equals(row.fromUserId._id)) {
@@ -82,7 +82,7 @@ export const getUserFeedHandler = async (req, res) => {
     });
 
     const friendsPosts = await Post.find({ user: { $in: friendIds } })
-      .populate("user", ["firstName", "lastName"])
+      .populate("user", ["firstName", "lastName", "photoURL"])
       .sort({ createdAt: -1 });
 
     res.json({ message: "Feed fetched successfully", data: friendsPosts });

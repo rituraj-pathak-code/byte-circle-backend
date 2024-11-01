@@ -6,7 +6,7 @@ export const userAuth = async (req, res, next) => {
     const { token } = req.cookies;
 
     if (!token) {
-      return res.send(401).send("Unauthorised")
+      return res.status(401).send("Unauthorised")
     }
 
     const decodedMessage = await jwt.verify(token, process.env.JWT_SECRET);

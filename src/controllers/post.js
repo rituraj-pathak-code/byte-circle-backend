@@ -4,6 +4,7 @@ export const createPostHandler = async (req, res) => {
   try {
     const user = req.user;
     const { text, images } = req.body;
+    console.log(req.body)
 
     if (!text) {
       return res.status(400).json({ error: "Post body is required." });

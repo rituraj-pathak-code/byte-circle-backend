@@ -11,10 +11,18 @@ import profileRouter from "./routes/profile.js"
 import subscriptionRequestRouter from "./routes/subscriptionRequest.js"
 import userRouter from "./routes/user.js"
 import postRouter from "./routes/post.js"
+import cors from 'cors'
 
 dotenv.config();
 
 const app = express();
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser())
 

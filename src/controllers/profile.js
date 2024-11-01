@@ -3,8 +3,11 @@ import bcrypt from "bcrypt";
 
 export const viewProfileHandler = async (req, res) => {
   try {
-    const user = req.user;
-    res.send(user);
+    const { _id, createdAt, email, firstName, lastName, photoURL } = req.user;
+    res.json({
+      message: "OK",
+      data: { _id, createdAt, email, firstName, lastName, photoURL },
+    });
   } catch (err) {
     res.status(500).send("ERROR : " + err.message);
   }
@@ -44,7 +47,7 @@ export const editPasswordHandler = async (req, res) => {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
     await user.save();
-    res.send("Password updated succesfully")
+    res.send("Password updated succesfully");
   } catch (err) {
     res.status(500).send("ERROR : " + err.message);
   }

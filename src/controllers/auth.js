@@ -10,6 +10,9 @@ export const signupHandler = async (req, res) => {
       return res.status(400).send("Invalid Sign up Request");
     }
     const { firstName, lastName, email, password } = req.body;
+    if(!firstName || !lastName || !email || !password){
+      return res.status(400).json({message: "Please fill all the details"});
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({
       firstName,
@@ -18,12 +21,13 @@ export const signupHandler = async (req, res) => {
       password: hashedPassword,
     });
     await user.save();
-    res.status(201).send("Account Created Successfully!");
+    res.status(201).json({message: "Account Created Successfully!"});
   } catch (err) {
+    console.log(err)
     if (err.code === 11000) {
-      return res.status(400).send("Email is already registered.");
+      return res.status(200).json({message: "Email is already registered."});
     }
-    res.status(500).send(err);
+    res.status(500).json({message: err.message});
   }
 };
 
@@ -34,11 +38,11 @@ export const loginHandler = async (req, res) => {
 
     const user = await User.findOne({ email: email });
     if (!user) {
-      return res.status(400).send("Invalid Credentials");
+      return res.status(401).send("Invalid Credentials");
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(400).send("Invalid Credentials");
+      return res.status(401).send("Invalid Credentials");
     }
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
     res.cookie("token", token, {

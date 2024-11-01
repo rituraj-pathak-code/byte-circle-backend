@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
   },
   photoURL: {
     type: "String",
-    default: "default picture url here",
+    default: "https://med.gov.bz/wp-content/uploads/2020/08/dummy-profile-pic.jpg",
   },
   gender: {
     type: String,
