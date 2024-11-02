@@ -1,5 +1,6 @@
 import Post from "../models/posts.js";
 import SubscriptionRequest from "../models/subscriptionRequest.js";
+import User from "../models/user.js";
 
 export const getAllsubscriptionRequestHandler = async (req, res) => {
   try {
@@ -88,5 +89,31 @@ export const getUserFeedHandler = async (req, res) => {
     res.json({ message: "Feed fetched successfully", data: friendsPosts });
   } catch (err) {
     res.status(400).send(err.message);
+  }
+};
+
+export const getAllFriendSuggestionHandler = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const friends = await SubscriptionRequest.find({
+      $or: [
+        { fromUserId: userId},
+        { toUserId: userId }
+      ]
+    }).select("fromUserId toUserId");
+
+    const friendIds = friends.map(friend => 
+      friend.fromUserId.toString() === userId.toString()
+        ? friend.toUserId
+        : friend.fromUserId
+    );
+
+    const profiles = await User.find({
+      _id: { $ne: userId, $nin: friendIds }
+    });
+
+    res.json({ message: "Success", data: profiles });
+  } catch (err) {
+    res.status(500).send("ERROR : " + err.message);
   }
 };

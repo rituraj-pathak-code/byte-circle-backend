@@ -52,3 +52,5 @@ export const editPasswordHandler = async (req, res) => {
     res.status(500).send("ERROR : " + err.message);
   }
 };
+
+
