@@ -100,3 +100,39 @@ export const deletePostHandler = async (req, res) => {
       res.status(400).send(err);
     }
   }
+
+  export const fetchLikesHandler = async (req,res) => {
+    try{
+      const {postId} = req.params;
+      const userId = req.user._id
+      const post = await Post.findById({_id:postId});
+      if (!post) return res.status(404).json({ message: "Post not found" });
+      const alreadyLiked = post.likes.includes(userId);
+
+      res.status(200).json({ message: "Fetched Likes", count: post.likes.length, liked:alreadyLiked });
+
+    }catch(err){
+      res.status(500).send(err.message);
+    }
+  }
+
+  export const likePostHandler = async (req,res) => {
+    try{
+      const userId = req.user._id;
+      const {postId} = req.body;
+
+      const post = await Post.findById({_id:postId});
+      if (!post) return res.status(404).json({ message: "Post not found" });
+      const alreadyLiked = post.likes.includes(userId);
+      if (alreadyLiked) {
+        post.likes = post.likes.filter((id) => id.toString() !== userId.toString());
+      }else {
+        post.likes.push(userId);
+      }
+      await post.save();
+      res.status(201).json({ message: alreadyLiked ? "Like removed" : "Post liked", post });
+    }catch(err){
+      console.error(err.message)
+      res.status(500).send(err.message);
+    }
+  }

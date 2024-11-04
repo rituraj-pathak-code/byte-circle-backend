@@ -117,3 +117,4 @@ export const getAllFriendSuggestionHandler = async (req, res) => {
     res.status(500).send("ERROR : " + err.message);
   }
 };
+

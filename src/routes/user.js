@@ -13,4 +13,6 @@ router.get("/feed", getUserFeedHandler);
 
 router.get("/suggestions", getAllFriendSuggestionHandler)
 
+
+
 export default router;
